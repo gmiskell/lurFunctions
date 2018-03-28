@@ -1,0 +1,10 @@
+Package: lurFunctions
+Title: Different Functions for Linear Regression
+Version: 0.0.0.9000
+Author: Georgia Miskell [aut, cre]
+Description: Collection of tests I’ve used when using linear regression.
+Depends: R (>= 3.3.3)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
