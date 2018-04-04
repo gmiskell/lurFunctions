@@ -4,33 +4,34 @@
 #' @param obs This is the numeric column under investigation.
 #' @param comparison.value This is the data to compare the obs against.
 #' @param date Date column.
-#' @param min.length This is the length of the sample to draw the mean and variance from.
+#' @param min.length This is the length of the comparison value sample to draw the break points from.
 #' @param break.points Number of break points within the data (will make break.point + 1 regressions).
 #' @param plot Option to create a plot with the break points. Defaults to `FALSE`.
+#' @param plot.title If plot is `TRUE` this command provides an option for giving the plot a title.
 #' @export
 #' @examples
 #' segmentFUN()
 
 
-segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points, plot = FALSE){
-  
+segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points, plot = FALSE, plot.title = NA){
+
   # load required libraries
   library(tidyverse);library(segmented)
-  
+
   # define selected variables
   x <- as.data.frame(x)
   x$date <- lubridate::ymd_hms(x$date)
-  
+
   # assign variable names and filter data to the set dates
   x$obs <- x[, obs]
   x$comparison.value <- x[, comparison.value]
-  
+
   # select the required columns
   x <- x %>% dplyr::select(date, obs, comparison.value)
-  
+
   # remove any repeating and empty rows
   x <- unique.data.frame(x)
-  
+
   # find the initial break-points and set the model
   original.breaks <- break.points
   break.points <- original.breaks + 1
@@ -39,7 +40,7 @@ segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points,
   # remove break points where no mins data available
   break.points <- break.points[break.points %in% x$comparison.value]
   lm.model <- lm(obs ~ comparison.value, data = x)
-  
+
   # segmented regression
   comparison.value = NULL
   if.false <- F
@@ -56,10 +57,19 @@ segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points,
   s.intercept <- data.frame(intercept(s))[,1]
   s.slope <- data.frame(slope(s))[,1]
   s.df <- data.frame(s.names, s.breaks, s.intercept, s.slope)
-  
+
   if(plot == TRUE){
-    plot.segmented(s, res = T, conf.level = 0.95, dens.rug = T)
-    text(x = s.df$s.breaks, y = s.df$Est. + s.df$s.slope * s.df$s.breaks,label = s.df$s.breaks, col = 'red')
+    library(ggplot2)
+
+    dat2 <- data.frame(x = x$comparison.value, y = broken.line(s)$fit)
+
+    ggplot(x, aes(x = comparison.value, y = obs))+
+      theme_classic()+
+      geom_point(aes(colour = as.character(day(date))))+
+      geom_line(data = dat2, aes(x = x, y= y), colour = 'red')+
+      labs(title = plot.title, colour = 'day')+
+      geom_label(data = s.df, aes(label = s.breaks, x = s.breaks, y = s.intercept + s.slope * s.breaks), nudge_y = 2, alpha = 0.5, size = 8)+
+      theme(legend.position = c(0.1, 0.1))
   }
   return(s.df)
   }
