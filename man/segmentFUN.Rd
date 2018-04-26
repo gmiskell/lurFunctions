@@ -5,7 +5,7 @@
 \title{A Segmented Regression Function.}
 \usage{
 segmentFUN(x, obs, comparison.value, date, min.length, break.points,
-  plot = FALSE)
+  plot = FALSE, plot.title = NA)
 }
 \arguments{
 \item{obs}{This is the numeric column under investigation.}
@@ -14,11 +14,13 @@ segmentFUN(x, obs, comparison.value, date, min.length, break.points,
 
 \item{date}{Date column.}
 
-\item{min.length}{This is the length of the sample to draw the mean and variance from.}
+\item{min.length}{This is the length of the comparison value sample to draw the break points from.}
 
 \item{break.points}{Number of break points within the data (will make break.point + 1 regressions).}
 
 \item{plot}{Option to create a plot with the break points. Defaults to `FALSE`.}
+
+\item{plot.title}{If plot is `TRUE` this command provides an option for giving the plot a title.}
 }
 \description{
 A function for finding a number of linear fits within a dataset.

@@ -27,7 +27,7 @@ segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points,
   x$comparison.value <- x[, comparison.value]
 
   # select the required columns
-  x <- x %>% dplyr::select(date, obs, comparison.value)
+  x <- x %>% dplyr::select(date, obs, comparison.value) %>% filter(!is.na(obs))
 
   # remove any repeating and empty rows
   x <- unique.data.frame(x)
@@ -36,6 +36,7 @@ segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points,
   original.breaks <- break.points
   break.points <- original.breaks + 1
   break.points <- min.length/break.points * seq(break.points)
+  break.points <- round(break.points)
   break.points <- break.points[-length(break.points)]
   # remove break points where no mins data available
   break.points <- break.points[break.points %in% x$comparison.value]
@@ -63,14 +64,21 @@ segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points,
 
     dat2 <- data.frame(x = x$comparison.value, y = broken.line(s)$fit)
 
-    ggplot(x, aes(x = comparison.value, y = obs))+
+    x$row.num <- seq(1:nrow(x))
+
+    seg.plot <- ggplot(x, aes(x = comparison.value, y = obs))+
       theme_classic()+
-      geom_point(aes(colour = as.character(day(date))))+
+      geom_point(aes(colour = desc(row.num)))+
       geom_line(data = dat2, aes(x = x, y= y), colour = 'red')+
-      labs(title = plot.title, colour = 'day')+
+      labs(title = plot.title)+
       geom_label(data = s.df, aes(label = s.breaks, x = s.breaks, y = s.intercept + s.slope * s.breaks), nudge_y = 2, alpha = 0.5, size = 8)+
-      theme(legend.position = c(0.1, 0.1))
+      theme(legend.position = 'none')
+
+    print(seg.plot)
   }
-  return(s.df)
-  }
+  return(seg.df)
+}
+
+
+
 
