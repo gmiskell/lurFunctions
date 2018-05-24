@@ -4,7 +4,7 @@
 \alias{changingCalFUN}
 \title{Calibration Interpolation Over Time.}
 \usage{
-changingCalFUN(x, obs, a1, b1, a2, b2)
+changingCalFUN(x, obs, first.offset, second.offset, first.slope, second.slope)
 }
 \arguments{
 \item{obs}{The column under investigation.}
