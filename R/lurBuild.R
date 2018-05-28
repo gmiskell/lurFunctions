@@ -12,7 +12,7 @@
 lurBuildFUN <- function(x, resp, method = 'caret'){
   
   # install and load required packages
-  library(stats); library(tidyverse); library(caret)
+  library(tidyverse); library(caret)
   
   # load required functions
   round_df <- function(df, digits){

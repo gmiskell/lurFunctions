@@ -10,7 +10,7 @@
 
 lagLinearFUN <- function(x, obs, lags = 3){
   
-  library(stats); library(tidyverse)
+  library(tidyverse)
   
   # create lag in data
   rep.NA <- rep(NA, lags)

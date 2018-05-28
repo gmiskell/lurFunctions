@@ -13,7 +13,7 @@
 loocvFUN <- function(x, sites, response, variables) {
     
     # load required packages
-    library(stats); library(stringr)
+    library(stringr)
   
     frml <- str_c(response,'~', variables)
     sites <- x[, sites]
