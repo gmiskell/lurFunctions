@@ -11,7 +11,7 @@
 
 lurBuildFUN <- function(x, resp, method = 'caret'){
   
-  # install and load required packages
+  # load required packages
   library(tidyverse); library(caret)
   
   # load required functions
@@ -25,7 +25,7 @@ lurBuildFUN <- function(x, resp, method = 'caret'){
   if(method == 'caret'){
     modelFun <- function(x, list = 'response'){
       # make response and predictors into separate files
-      x$response <- x[, resp]
+      x$response <- x[[resp]]
       response <- x$response
       x[, resp] <- NULL
       predictor <- x[, ! names(x) %in% list]
@@ -53,7 +53,7 @@ lurBuildFUN <- function(x, resp, method = 'caret'){
       modelFit1 <- train(response ~ ., data = predictor, method = 'lm', trControl = control, metric = 'RMSE')
       
       # model evaluation
-      ## coefficient direction
+      # coefficient direction
       coef.length <- length(modelFit1$coefnames) + 1
       coef.df <- data.frame(names = modelFit1$coefnames, coef = summary(modelFit1)$coefficients[2:coef.length], pvalue = summary(modelFit1)$coefficients[(3*coef.length+2):(4*coef.length)])
       coef.df$direction <- ifelse(coef.df$coef > 0, 1, 0)
@@ -81,7 +81,7 @@ lurBuildFUN <- function(x, resp, method = 'caret'){
   if(method == 'escape'){
     modelFun <- function(x, list = 'response'){
       # make response and predictors into separate files
-      x$response <- x[, resp]
+      x$response <- x[[resp]]
       response <- x$response
       x[, resp] <- NULL
       predictor <- x[, ! names(x) %in% list]

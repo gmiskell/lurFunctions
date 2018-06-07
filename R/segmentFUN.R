@@ -23,8 +23,8 @@ segmentFUN <- function(x, obs, comparison.value, date, min.length, break.points,
   x$date <- lubridate::ymd_hms(x$date)
 
   # assign variable names and filter data to the set dates
-  x$obs <- x[, obs]
-  x$comparison.value <- x[, comparison.value]
+  x$obs <- x[[obs]]
+  x$comparison.value <- x[[comparison.value]]
 
   # select the required columns
   x <- x %>% dplyr::select(date, obs, comparison.value) %>% filter(!is.na(obs))

@@ -14,11 +14,11 @@
 changingCalFUN <- function(x, obs, first.offset, second.offset, first.slope, second.slope){
 
   x <- as.data.frame(x)
-  x$obs <- x[, obs];
-  x$first.offset <- x[, first.offset]
-  x$first.slope <- x[, first.slope]
-  x$second.offset <- x[, second.offset]
-  x$second.slope <- x[, second.slope]
+  x$obs <- x[[obs]];
+  x$first.offset <- x[[first.offset]]
+  x$first.slope <- x[[first.slope]]
+  x$second.offset <- x[[second.offset]]
+  x$second.slope <- x[[second.slope]]
 
   # determine the monitoring length based on the length of the obs
   monitoring_length <- length(x$obs)

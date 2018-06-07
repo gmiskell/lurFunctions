@@ -16,7 +16,7 @@ loocvFUN <- function(x, sites, response, variables) {
     library(stringr)
   
     frml <- str_c(response,'~', variables)
-    sites <- x[, sites]
+    sites <- x[[sites]]
     
     a <- unlist(sapply(seq(1,nrow(x)), function(i) {         
       training = x[-i,]
